@@ -1,0 +1,2350 @@
+/* ============ Base ============ */
+:root{
+    --bg: #241a12;           /* тъмно кафяво */
+    --bg2:#1c130d;
+    --text: #f3efe8;         /* почти бяло */
+    --muted: rgba(243,239,232,.55);
+    --gold: #b79b56;         /* златна линия */
+    --gold2:#8b743d;
+    --treeGreen: rgba(160, 210, 140, 0.18); /* светло зелени борчета */
+  }
+  
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 50% 45%, var(--bg) 0%, var(--bg2) 65%, #120b07 100%);
+    color:var(--text);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  
+  /* ============ Loader overlay ============ */
+  .loader{
+    position:fixed;
+    inset:0;
+    display:grid;
+    place-items:center;
+    background: radial-gradient(1200px 600px at 50% 45%, var(--bg) 0%, var(--bg2) 65%, #120b07 100%);
+    z-index:9999;
+    transition: opacity .45s ease, visibility .45s ease;
+  }
+  
+  .loader__content{
+    width:min(620px, 92vw);
+    text-align:center;
+    transform: translateY(-4px);
+  }
+  
+  .loader__title{
+    margin:0 0 14px 0;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(38px, 5vw, 56px);
+    letter-spacing: .22em;
+    font-weight: 400;
+    text-transform: uppercase;
+  
+    text-shadow:
+      0 1px 0 rgba(0,0,0,.45),
+      0 0 22px rgba(0,0,0,.45);
+  }
+  
+  
+  .loader__subtitle{
+    font-family: 'Kelly Slab', cursive;
+    font-size: 12px;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 22px;
+  }
+  
+  
+  /* Тънката линия като progress */
+  .loader__bar{
+    position: relative;
+    height: 2px;
+    width: min(340px, 70vw);
+    margin: 0 auto 14px auto;
+    background: rgba(183,155,86,.22);
+    border-radius: 999px;
+    overflow:hidden;
+  }
+  
+  /* запълване */
+  .loader__barFill{
+    height:100%;
+    width:0%;
+    background: linear-gradient(90deg, rgba(183,155,86,.2), var(--gold), rgba(183,155,86,.2));
+    box-shadow: 0 0 18px rgba(183,155,86,.25);
+    border-radius: 999px;
+    transition: width .18s ease;
+  }
+  
+  /* “ЗАРЕЖДАНЕ...” */
+  .loader__hint{
+    font-family: 'Kelly Slab', cursive;
+    font-size: 10px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: rgba(243,239,232,.32);
+  }
+  
+  
+  /* Изчезване */
+  .loader--done{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  
+  /* ============ App hidden until loaded ============ */
+  .app--hidden{
+    opacity:0;
+    transform: translateY(6px);
+  }
+  
+  .app{
+    min-height:100vh;
+    padding: 40px;
+    opacity:1;
+    transform:none;
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  
+  .loader__hint{
+    animation: fadePulse 2.6s ease-in-out infinite;
+  }
+  
+  @keyframes fadePulse {
+    0%   { opacity:.35; }
+    50%  { opacity:.7; }
+    100% { opacity:.35; }
+  }
+  
+
+
+  .loader{
+    position:fixed;
+    inset:0;
+    display:grid;
+    place-items:center;
+    z-index:9999;
+  
+    /* ТВОЯТ ОРИГИНАЛЕН ФОН – НЕ ГО ПИПАМЕ */
+    background: radial-gradient(
+      1200px 600px at 50% 45%,
+      var(--bg) 0%,
+      var(--bg2) 65%,
+      #120b07 100%
+    );
+  
+    transition: opacity .45s ease, visibility .45s ease;
+    overflow:hidden;
+  }
+  
+  /* 🌲🌲🌲 РАЗПРЪСНАТИ БОРЧЕТА */
+  .loader::before{
+    content:"";
+    position:absolute;
+    inset:0;
+  
+    background-image: url("tree-svgrepo-com.svg");
+    background-repeat: repeat;
+    background-size: 110px;
+    opacity: .15;
+    background-position: center;
+  
+    /* правим ги светло зелени */
+    filter:
+      invert(62%)
+      sepia(32%)
+      saturate(420%)
+      hue-rotate(70deg)
+      brightness(1.15);
+  
+    opacity: .22;
+    pointer-events:none;
+  }
+  
+  .loader__content{
+    position:relative;
+    z-index:1;
+  }
+  
+
+  /* =========================
+   Desktop Top Navigation
+========================= */
+
+.topbar{
+    position: fixed;
+    top: 18px;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    pointer-events: none; /* само вътрешното да клика */
+  }
+  
+  .topbar__inner{
+    width: min(1240px, 92vw);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  
+    padding: 10px 12px;
+    border-radius: 30px;
+  
+    background: rgba(70, 110, 150, .22);            /* синкав “glass” */
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  
+    pointer-events: auto;
+  }
+  
+  /* LEFT brand */
+  .brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 6px;
+  }
+  
+  .brand__logo{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  
+    background: rgba(255,255,255,.18);
+    border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.9);
+    text-decoration: none;
+  }
+  
+  .brand__name{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    font-size: 13px;
+    color: rgba(255,255,255,.88);
+    white-space: nowrap;
+  }
+  
+  /* CENTER nav pill with border */
+  .navPill{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  
+    padding: 7px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(255,255,255,.06);
+  }
+  
+  .navPill__link{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+  
+    color: rgba(255,255,255,.85);
+    padding: 8px 14px;
+    border-radius: 999px;
+  
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+  }
+  
+  .navPill__link:hover{
+    background: rgba(255,255,255,.10);
+    color: rgba(255,255,255,.95);
+    transform: translateY(-1px);
+  }
+  
+  .navPill__link.is-active{
+    background: rgba(255,255,255,.16);
+    color: rgba(255,255,255,.98);
+  }
+  
+  /* RIGHT actions */
+  .actions{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-right: 6px;
+  }
+  
+  .iconBtn{
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.12);
+    color: rgba(255,255,255,.9);
+    text-decoration: none;
+  
+    transition: transform .2s ease, background .2s ease;
+  }
+  
+  .iconBtn:hover{
+    transform: translateY(-1px);
+    background: rgba(255,255,255,.16);
+  }
+  
+  .ctaBtn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 999px;
+  
+    background: rgba(255,255,255,.92);
+    color: rgba(30,30,30,.92);
+    text-decoration: none;
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    font-size: 12px;
+    letter-spacing: .10em;
+    text-transform: uppercase;
+  
+    border: 1px solid rgba(255,255,255,.45);
+    box-shadow: 0 10px 22px rgba(0,0,0,.18);
+  
+    transition: transform .2s ease, filter .2s ease;
+  }
+  
+  .ctaBtn svg{
+    color: rgba(30,30,30,.9);
+  }
+  
+  .ctaBtn:hover{
+    transform: translateY(-1px);
+    filter: brightness(1.02);
+  }
+  
+  /* за да не влиза контента под fixed нав-а */
+  .app{
+    padding-top: 110px;
+  }
+
+  .brand__logoSvg{
+    width: 18px;
+    height: 18px;
+    display: block;
+    color: rgba(255,255,255,.92);
+  }
+  
+  .brand__logo:hover .brand__logoSvg{
+    transform: scale(1.06);
+  }
+  
+  .brand__logoSvg{
+    transition: transform .25s ease;
+  }
+  
+  /* ===== Tree glow on hover ===== */
+.brand__logoSvg{
+    width: 18px;
+    height: 18px;
+    display: block;
+    color: rgba(255,255,255,.92);
+    transition: transform .25s ease, filter .25s ease, opacity .25s ease;
+  }
+  
+  .brand__logo:hover .brand__logoSvg{
+    transform: scale(1.06);
+    filter:
+      drop-shadow(0 0 6px rgba(255,255,255,.30))
+      drop-shadow(0 0 14px rgba(183,155,86,.35)); /* златисто glow */
+    opacity: 1;
+  }
+  
+  .brand__logo{
+    transition: background .25s ease, border-color .25s ease;
+  }
+  
+  .brand__logo:hover{
+    background: rgba(255,255,255,.22);
+    border-color: rgba(255,255,255,.22);
+  }
+  
+
+  /* ===== Scroll state ===== */
+.topbar__inner{
+    transition:
+      background .25s ease,
+      border-color .25s ease,
+      box-shadow .25s ease,
+      transform .25s ease;
+  }
+  
+  .topbar.is-scrolled .topbar__inner{
+    background: rgba(55, 95, 135, .40);     /* по-плътно */
+    border-color: rgba(255,255,255,.14);
+    box-shadow: 0 14px 40px rgba(0,0,0,.32);
+    transform: translateY(-2px);
+  }
+  
+  .topbar.is-scrolled .navPill{
+    background: rgba(255,255,255,.08);
+    border-color: rgba(255,255,255,.14);
+  }
+  
+  .topbar.is-scrolled .iconBtn{
+    background: rgba(255,255,255,.12);
+  }
+  
+
+  /* ===== Responsive ===== */
+
+/* Large tablets / small laptops */
+@media (max-width: 1100px){
+    .topbar__inner{
+      width: min(980px, 94vw);
+      gap: 12px;
+      padding: 10px;
+    }
+  
+    .navPill{
+      gap: 6px;
+      padding: 6px 8px;
+    }
+  
+    .navPill__link{
+      padding: 8px 10px;
+      letter-spacing: .08em;
+    }
+  
+    .brand__name{
+      font-size: 12px;
+      letter-spacing: .14em;
+    }
+  
+    .ctaBtn span{
+      display: none; /* остава само иконата + “pill” */
+    }
+  
+    .ctaBtn{
+      padding: 0 12px;
+    }
+  }
+  
+  /* Tablets */
+  @media (max-width: 860px){
+    .navPill__link:nth-child(5),
+    .navPill__link:nth-child(6){
+      display: none; /* скриваме ГАЛЕРИЯ и ЦЕНИ временно */
+    }
+  
+    .topbar{
+      top: 12px;
+    }
+  
+    .app{
+      padding-top: 96px;
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 640px){
+    .topbar__inner{
+      border-radius: 20px; /* по-малко “pill” на малък екран */
+    }
+  
+    .navPill{
+      display: none; /* ще го заменим с burger меню */
+    }
+  
+    .actions{
+      gap: 8px;
+    }
+  
+    .iconBtn{
+      width: 32px;
+      height: 32px;
+    }
+  
+    .ctaBtn{
+      height: 32px;
+      padding: 0 10px;
+    }
+  
+    .brand__name{
+      display: none; /* само лого на мобилно, ако искаш */
+    }
+  }
+  
+
+
+  /* =========================
+   Mobile fullscreen menu
+========================= */
+
+/* Burger */
+.burger{
+    display: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(45, 75, 55, .95);
+    cursor: pointer;
+  
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  
+    transition: background .25s ease;
+  }
+  
+  .burger span{
+    width: 16px;
+    height: 2px;
+    background: rgba(255,255,255,.9);
+    border-radius: 2px;
+    transition: transform .3s ease, opacity .3s ease;
+  }
+  
+  /* Burger active → X */
+  .burger.is-open span:nth-child(1){
+    transform: translateY(6px) rotate(45deg);
+  }
+  .burger.is-open span:nth-child(2){
+    opacity: 0;
+  }
+  .burger.is-open span:nth-child(3){
+    transform: translateY(-6px) rotate(-45deg);
+  }
+  
+  /* Fullscreen overlay */
+  .mobileMenu{
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+  
+    background:
+    radial-gradient(
+      1200px 600px at 50% 40%,
+      rgba(215, 190, 135, .55),
+      rgba(45, 33, 24, .92)
+    ),
+    rgba(45, 33, 24, .92);
+  
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .35s ease;
+  }
+  
+  .mobileMenu.is-open{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* Nav inside */
+  .mobileMenu__nav{
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    text-align: center;
+  }
+  
+  .mobileMenu__nav a{
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 26px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    text-decoration: none;
+  
+    color: rgba(255,255,255,.95);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  
+  .mobileMenu__nav a:hover{
+    transform: translateY(-2px);
+    opacity: .85;
+  }
+  
+  .mobileMenu__cta{
+    margin-top: 14px;
+    font-size: 20px !important;
+    letter-spacing: .18em;
+    padding: 14px 26px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.92);
+    color: #1b1b1b !important;
+  }
+  
+  /* Show burger only on mobile */
+  @media (max-width: 640px){
+    .burger{
+      display: flex;
+    }
+  }
+
+  
+
+  /* Topbar над всичко, включително mobile menu */
+.topbar{
+    z-index: 300;
+  }
+  
+  /* Fullscreen menu да е под topbar, но над page content */
+  .mobileMenu{
+    z-index: 250;
+  }
+  
+  /* Burger да се вижда ясно, включително в open state */
+  .burger{
+    position: relative;
+    z-index: 320; /* над overlay */
+  }
+  
+  .burger.is-open{
+    background: rgba(255,255,255,.14);
+    border-color: rgba(255,255,255,.18);
+  }
+  
+
+
+  .mobileMenu__close{
+    position: absolute;
+    top: 18px;
+    right: 18px;
+  
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.10);
+    cursor: pointer;
+  
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .mobileMenu__close span{
+    width: 18px;
+    height: 2px;
+    background: rgba(255,255,255,.92);
+    border-radius: 2px;
+  }
+  .mobileMenu.is-open .mobileMenu__close span:nth-child(1){
+    transform: translateY(7px) rotate(45deg);
+  }
+  .mobileMenu.is-open .mobileMenu__close span:nth-child(2){
+    opacity: 0;
+  }
+  .mobileMenu.is-open .mobileMenu__close span:nth-child(3){
+    transform: translateY(-7px) rotate(-45deg);
+  }
+  
+
+ 
+
+  .mobileMenu__nav a.is-active{
+    text-shadow:
+      0 0 12px rgba(183,155,86,.55),
+      0 0 28px rgba(183,155,86,.35);
+  }
+  
+  .mobileMenu__nav a:hover{
+    text-shadow:
+      0 0 10px rgba(183,155,86,.35);
+  }
+
+  
+  /* Mobile menu headings – Kelly Slab */
+@media (max-width: 640px){
+    .mobileMenu__nav a{
+      font-family: 'Kelly Slab', cursive;
+      letter-spacing: .18em;
+    }
+  }
+
+
+  /* =========================
+   HERO (Homepage)
+========================= */
+
+.hero{
+    position: relative;
+    min-height: calc(100vh - 0px);
+    display: grid;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  /* background layers */
+  .hero__bg{
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .hero__bgLayer{
+    position: absolute;
+    inset: 0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  
+    /* Ken Burns (много лек) */
+    transform: scale(1.05);
+    animation: kenburns 12s ease-in-out infinite;
+  
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+  
+  .hero__bgLayer.is-active{
+    opacity: 1;
+  }
+  
+  @keyframes kenburns{
+    0%   { transform: scale(1.05) translateY(0px); }
+    50%  { transform: scale(1.10) translateY(-6px); }
+    100% { transform: scale(1.05) translateY(0px); }
+  }
+  
+  /* overlay като в скрийншота: по-тъмен отляво, изчезва надясно */
+  .hero__overlay{
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg,
+        rgba(20,14,10,.78) 0%,
+        rgba(20,14,10,.62) 32%,
+        rgba(20,14,10,.20) 62%,
+        rgba(20,14,10,0) 80%);
+  }
+  
+  /* inner layout */
+  .hero__inner{
+    position: relative;
+    z-index: 2;
+    width: min(1240px, 92vw);
+    margin: 0 auto;
+    padding: 90px 0 56px; /* място за topbar */
+  }
+  
+  .hero__content{
+    max-width: 640px;
+  }
+  
+  /* small golden kicker */
+  .hero__kicker{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    letter-spacing: .30em;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: rgba(183,155,86,.95);
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  
+  .hero__kicker::before{
+    content:"";
+    width: 44px;
+    height: 1px;
+    background: rgba(183,155,86,.85);
+    opacity: .9;
+  }
+  
+  /* title */
+  .hero__title{
+    margin: 0 0 14px 0;
+    line-height: .9;
+    letter-spacing: .10em;
+  }
+  
+  .hero__titleTop{
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 400;
+    font-size: clamp(56px, 7vw, 104px);
+    color: rgba(255,255,255,.96);
+    text-shadow: 0 12px 30px rgba(0,0,0,.35);
+  }
+  
+  .hero__titleBottom{
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 400;
+    font-size: clamp(56px, 7vw, 104px);
+    color: rgba(183,155,86,.95);
+    text-shadow: 0 12px 30px rgba(0,0,0,.35);
+  }
+  
+  /* description */
+  .hero__desc{
+    margin: 0 0 22px 0;
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    line-height: 1.55;
+    color: rgba(255,255,255,.82);
+    font-size: 14px;
+    max-width: 580px;
+  }
+  
+  /* stat cards */
+  .hero__stats{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    margin: 18px 0 22px;
+    max-width: 560px;
+  }
+  
+  .statCard{
+    border-radius: 16px;
+    padding: 14px 14px 12px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 18px 45px rgba(0,0,0,.25);
+    text-align: center;
+  }
+  
+  .statCard__icon{
+    opacity: .9;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  
+  .statCard__value{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    font-size: 18px;
+    color: rgba(255,255,255,.92);
+    margin-bottom: 6px;
+  }
+  
+  .statCard__label{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .18em;
+    font-size: 11px;
+    color: rgba(255,255,255,.70);
+  }
+  
+  /* CTA buttons */
+  .hero__cta{
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  
+  .btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 54px;
+    padding: 0 22px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 13px;
+    transition: transform .2s ease, filter .2s ease, background .2s ease, border-color .2s ease;
+  }
+  
+  .btn:hover{ transform: translateY(-2px); }
+  
+  .btn__icon{ opacity: .95; }
+  
+  .btn--gold{
+    background: rgba(183,155,86,.92);
+    color: rgba(20,14,10,.92);
+    box-shadow: 0 16px 34px rgba(0,0,0,.22);
+    border: 1px solid rgba(255,255,255,.10);
+  }
+  
+  .btn--gold:hover{ filter: brightness(1.03); }
+  
+  .btn--glass{
+    background: rgba(90, 130, 170, .28);
+    border: 1px solid rgba(255,255,255,.14);
+    color: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .btn--glass:hover{
+    background: rgba(90, 130, 170, .34);
+  }
+  
+  /* bottom meta */
+  .hero__meta{
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255,255,255,.55);
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 12px;
+  }
+  
+  .hero__metaDot{ opacity: .5; }
+  
+  /* entrance animation after loader */
+  body.is-ready .hero__content{
+    animation: heroIn .9s ease both;
+  }
+  @keyframes heroIn{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  
+  /* responsive */
+  @media (max-width: 980px){
+    .hero__content{ max-width: 720px; }
+    .hero__stats{ grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 420px; }
+  }
+  
+  @media (max-width: 640px){
+    .hero__inner{ padding: 84px 0 40px; }
+    .hero__content{ max-width: 92vw; }
+    .hero__desc{ font-size: 13px; }
+    .hero__cta{ flex-direction: column; align-items: flex-start; }
+    .btn{ width: 100%; justify-content: center; }
+  }
+  
+
+  /* =========================
+   Right side floating UI
+========================= */
+
+/* Vertical reserve button */
+.sideReserve{
+    position: fixed;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 220;
+  
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  
+    padding: 12px 10px;
+    border-radius: 12px;
+  
+    background: rgba(183,155,86,.85);
+    color: rgba(20,14,10,.92);
+    text-decoration: none;
+  
+    box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    border: 1px solid rgba(255,255,255,.10);
+  
+    transition: transform .2s ease, filter .2s ease, opacity .2s ease;
+  }
+  
+  .sideReserve:hover{
+    filter: brightness(1.03);
+    transform: translateY(-50%) translateX(-2px);
+  }
+  
+  .sideReserve__text{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-size: 12px;
+  
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+  }
+  
+  .sideReserve__icon{
+    font-size: 16px;
+  }
+  
+  /* Floating badge bottom-right */
+  .floatingBadge{
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 210;
+  
+    width: min(360px, 88vw);
+    border-radius: 18px;
+    padding: 16px 16px 14px;
+  
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.14);
+    box-shadow: 0 20px 55px rgba(0,0,0,.30);
+  
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  
+    color: rgba(255,255,255,.90);
+    transition: transform .25s ease, opacity .25s ease;
+  }
+  
+  .floatingBadge__top{
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .floatingBadge__star{
+    width: 36px;
+    height: 36px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+  
+    background: rgba(183,155,86,.20);
+    border: 1px solid rgba(183,155,86,.25);
+    color: rgba(183,155,86,.95);
+    font-size: 16px;
+  }
+  
+  .floatingBadge__title{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .14em;
+    font-size: 13px;
+  }
+  
+  .floatingBadge__subtitle{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: 11px;
+    color: rgba(255,255,255,.65);
+    margin-top: 2px;
+  }
+  
+  .floatingBadge__row{
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,.10);
+  }
+  
+  .badgeItem{
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    letter-spacing: .10em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: rgba(255,255,255,.75);
+  }
+  
+  /* Scroll to top button */
+  .scrollTop{
+    position: fixed;
+    right: 18px;
+    bottom: 98px; /* над badge-а */
+    z-index: 215;
+  
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+  
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(183,155,86,.35);
+    color: rgba(255,255,255,.92);
+  
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  
+    box-shadow: 0 18px 40px rgba(0,0,0,.25);
+    transition: transform .2s ease, opacity .2s ease;
+  
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .scrollTop.is-visible{
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  .scrollTop:hover{
+    transform: translateY(-2px);
+  }
+  
+  /* Hide / adjust on small screens to avoid clutter */
+  @media (max-width: 860px){
+    .sideReserve{ right: 10px; }
+    .floatingBadge{ width: min(320px, 92vw); }
+  }
+  
+  @media (max-width: 640px){
+    .sideReserve{
+      display: none; /* на мобилно имаме fullscreen меню + CTA */
+    }
+    .scrollTop{
+      right: 14px;
+      bottom: 18px;
+    }
+    .floatingBadge{
+      left: 14px;
+      right: 14px;
+      bottom: 70px; /* над scrollTop */
+      width: auto;
+    }
+  }
+  
+  /* When mobile menu is open, hide floating UI */
+  .mobileMenu.is-open ~ .scrollTop,
+  .mobileMenu.is-open ~ .sideReserve,
+  .mobileMenu.is-open ~ .floatingBadge{
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  
+
+  /* =========================
+   ABOUT ("ЗА НАС")
+========================= */
+
+.about{
+    position: relative;
+    padding: 90px 0 86px;
+    overflow: hidden;
+  
+    /* кремав/бял фон като скрийншота */
+    background:
+      radial-gradient(900px 420px at 50% 20%, rgba(183,155,86,.08), rgba(255,255,255,0) 60%),
+      #fbf8f2;
+  }
+  
+  .about__inner{
+    width: min(1120px, 92vw);
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+  }
+  
+  /* pill "ЗА НАС" */
+  .about__pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  
+    padding: 8px 16px;
+    border-radius: 999px;
+  
+    background: rgba(183,155,86,.10);
+    border: 1px solid rgba(183,155,86,.18);
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: 12px;
+    color: rgba(68,48,26,.90);
+    margin-bottom: 18px;
+  }
+  
+  .about__pillIcon{
+    opacity: .9;
+  }
+  
+  /* title */
+  .about__title{
+    margin: 0 0 14px 0;
+    line-height: 1.0;
+    letter-spacing: .12em;
+  }
+  
+  .about__titleTop{
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.5vw, 44px);
+    color: rgba(42,30,18,.88);
+  }
+  
+  .about__titleBottom{
+    display: block;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 400;
+    font-size: clamp(28px, 3.5vw, 44px);
+    color: rgba(183,155,86,.92);
+  }
+  
+  .about__subtitle{
+    margin: 0 auto 42px;
+    max-width: 860px;
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 14px;
+    color: rgba(68,48,26,.78);
+  }
+  
+  /* stats row */
+  .about__stats{
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 38px;
+    justify-items: center;
+    align-items: start;
+    margin-top: 10px;
+  }
+  
+  .aboutStat{
+    width: 100%;
+    max-width: 170px;
+  }
+  
+  .aboutStat__icon{
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    margin: 0 auto 12px;
+  
+    display: grid;
+    place-items: center;
+  
+    background: rgba(183,155,86,.10);
+    border: 1px solid rgba(183,155,86,.16);
+    color: rgba(68,48,26,.85);
+    font-size: 20px;
+  }
+  
+  .aboutStat__value{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    font-size: 16px;
+    color: rgba(68,48,26,.90);
+    letter-spacing: .06em;
+    margin-bottom: 6px;
+  }
+  
+  .aboutStat__label{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    font-size: 12px;
+    color: rgba(68,48,26,.70);
+  }
+  
+  /* deco antlers */
+  .about__deco{
+    position: absolute;
+    z-index: 1;
+    opacity: .22;
+    filter: saturate(.9);
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  .about__deco--tl{
+    left: -60px;
+    top: 120px;
+    width: min(520px, 55vw);
+    transform: rotate(-6deg);
+  }
+  
+  .about__deco--br{
+    right: -70px;
+    bottom: -50px;
+    width: min(520px, 55vw);
+    transform: rotate(8deg);
+  }
+  
+  /* reveal animation on enter */
+  .about.is-visible .about__inner{
+    animation: aboutIn .9s ease both;
+  }
+  
+  @keyframes aboutIn{
+    from{ opacity: 0; transform: translateY(10px); }
+    to{ opacity: 1; transform: translateY(0); }
+  }
+  
+  /* responsive */
+  @media (max-width: 980px){
+    .about__stats{
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 26px 30px;
+    }
+    .about__deco--tl{ top: 140px; left: -120px; opacity: .18; }
+    .about__deco--br{ right: -130px; opacity: .18; }
+  }
+  
+  @media (max-width: 640px){
+    .about{ padding: 72px 0 70px; }
+    .about__subtitle{ font-size: 13px; margin-bottom: 34px; }
+    .about__deco--tl{ top: 160px; left: -160px; width: 85vw; }
+    .about__deco--br{ right: -160px; bottom: -70px; width: 85vw; }
+  }
+  
+
+  /* ===== About deco responsive sizing ===== */
+@media (max-width: 980px){
+    .about__deco--left{
+      left: -180px;
+      top: 170px;
+      width: min(520px, 72vw);
+      opacity: .18;
+    }
+  
+    .about__deco--right{
+      right: -200px;
+      bottom: -120px;
+      width: min(520px, 72vw);
+      opacity: .18;
+    }
+  }
+  
+  @media (max-width: 640px){
+    .about__deco--left{
+      left: -220px;
+      top: 190px;
+      width: 78vw;     /* по-малки на мобилно */
+      opacity: .14;
+    }
+  
+    .about__deco--right{
+      right: -240px;
+      bottom: -150px;
+      width: 78vw;     /* по-малки на мобилно */
+      opacity: .14;
+    }
+  }
+  
+  @media (max-width: 420px){
+    .about__deco--left,
+    .about__deco--right{
+      width: 70vw;     /* още по-малки за много малки телефони */
+      opacity: .12;
+    }
+  }
+  
+
+  .topbar__inner{
+    background: rgba(70, 110, 150, .16); /* по-прозрачно */
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  
+    transition:
+      background .35s ease,
+      border-color .35s ease,
+      box-shadow .35s ease,
+      backdrop-filter .35s ease;
+  }
+
+  .topbar.is-scrolled .topbar__inner{
+    background: rgba(255, 255, 255, .72); /* МЛЕЧНО */
+    border-color: rgba(255,255,255,.45);
+    box-shadow: 0 14px 40px rgba(0,0,0,.18);
+  }
+  
+  .topbar.is-scrolled .navPill{
+    background: rgba(255,255,255,.08);
+  }
+  
+  .topbar.is-scrolled .navPill__link{
+    color: rgba(255,255,255,.96);
+  }
+    
+  /* =========================
+   ABOUT DETAILS (2 columns)
+========================= */
+.aboutDetails{
+    background: #fbf8f2;
+    padding: 90px 0;
+    position: relative;
+  }
+  
+  .aboutDetails__inner{
+    width: min(1200px, 92vw);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 48px;
+    align-items: start;
+  }
+  
+  /* ---- Collage ---- */
+  .collage{
+    position: relative;
+    padding-top: 6px;
+    min-height: 560px;
+  }
+  
+  .collage__main{
+    position: relative;
+    border-radius: 22px;
+    overflow: hidden;
+  
+    background: #fff;
+    border: 4px solid rgba(255,255,255,.9);
+    box-shadow: 0 22px 70px rgba(0,0,0,.18);
+  
+    transform: rotate(-2deg);
+  }
+  
+  .collage__main img{
+    width: 100%;
+    height: 560px;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* pill location */
+  .collage__badge{
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    z-index: 2;
+  
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+  
+    background:rgba(183,155,86,.92);
+    color: rgba(255,255,255,.95);
+    border-radius: 999px;
+    padding: 10px 14px;
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 12px;
+  
+    box-shadow: 0 12px 28px rgba(0,0,0,.16);
+  }
+  
+  .collage__pin{ opacity: .95; }
+  
+  /* floating small photos */
+  .collage__photo{
+    position: absolute;
+    border-radius: 18px;
+    border: 4px solid rgba(255,255,255,.95);
+    box-shadow: 0 18px 50px rgba(0,0,0,.16);
+    object-fit: cover;
+  
+    transform: rotate(6deg);
+  }
+  
+  .collage__photo--topRight{
+    width: 170px;
+    height: 170px;
+    right: 28px;
+    top: -14px;
+    transform: rotate(10deg);
+  }
+  
+  .collage__photo--bottomLeft{
+    width: 180px;
+    height: 150px;
+    left: -6px;
+    bottom: -20px;
+    transform: rotate(-8deg);
+  }
+  
+  .collage__photo--bottomRight{
+    width: 190px;
+    height: 160px;
+    right: 34px;
+    bottom: -18px;
+    transform: rotate(8deg);
+  }
+  
+  /* ---- Right text ---- */
+  .aboutText__title{
+    margin: 0 0 18px 0;
+    font-family: 'Cinzel Decorative', serif;
+    font-weight: 400;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    font-size: 22px;
+    color: rgba(68,48,26,.92);
+  }
+  
+  .aboutText__body p{
+    margin: 0 0 14px 0;
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    line-height: 1.7;
+    font-size: 13px;
+    color: rgba(68,48,26,.76);
+  }
+  
+  /* feature cards */
+  .featureGrid{
+    margin-top: 26px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  
+  .feature{
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    align-items: start;
+  
+    padding: 14px 14px;
+    border-radius: 14px;
+  
+    background: rgba(255,255,255,.70);
+    border: 1px solid rgba(0,0,0,.05);
+    box-shadow: 0 12px 26px rgba(0,0,0,.08);
+  }
+  
+  .feature__icon{
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  
+    display: grid;
+    place-items: center;
+  
+    background: rgba(183,155,86,.14);
+    border: 1px solid rgba(183,155,86,.18);
+    color: rgba(68,48,26,.86);
+    font-size: 18px;
+  }
+  
+  .feature__title{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: 12px;
+    color: rgba(68,48,26,.90);
+    margin-bottom: 4px;
+  }
+  
+  .feature__sub{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 11px;
+    color: rgba(68,48,26,.65);
+    line-height: 1.4;
+  }
+  
+  /* buttons like screenshot */
+  .aboutBtns{
+    display: flex;
+    gap: 14px;
+    margin-top: 22px;
+  }
+  
+  .btn2{
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    text-decoration: none;
+  
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 12px;
+  
+    transition: transform .2s ease, filter .2s ease, background .2s ease;
+  }
+  
+  .btn2:hover{ transform: translateY(-2px); }
+  
+  .btn2--dark{
+    background: rgba(68,48,26,.92);
+    color: rgba(255,255,255,.94);
+  }
+  
+  .btn2--light{
+    background: rgba(183,155,86,.14);
+    border: 1px solid rgba(183,155,86,.22);
+    color: rgba(68,48,26,.92);
+  }
+  
+  /* line + footer */
+  .aboutLine{
+    margin-top: 22px;
+    height: 1px;
+    background: rgba(68,48,26,.14);
+  }
+  
+  .aboutFoot{
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .aboutFoot__pin{
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+  
+    background: rgba(183,155,86,.14);
+    border: 1px solid rgba(183,155,86,.20);
+    color: rgba(68,48,26,.86);
+  }
+  
+  .aboutFoot__title{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    font-size: 12px;
+    color: rgba(68,48,26,.90);
+  }
+  
+  .aboutFoot__sub{
+    font-family: 'Kelly Slab', system-ui, sans-serif;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: 11px;
+    color: rgba(68,48,26,.65);
+    margin-top: 3px;
+  }
+  
+  /* ---- Reveal animation ---- */
+  .aboutDetails{
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .aboutDetails.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* ---- Responsive ---- */
+  @media (max-width: 980px){
+    .aboutDetails__inner{
+      grid-template-columns: 1fr;
+      gap: 34px;
+    }
+    .collage{
+      min-height: auto;
+    }
+    .collage__main img{
+      height: 520px;
+    }
+  }
+  
+  @media (max-width: 640px){
+    .aboutDetails{ padding: 70px 0; }
+  
+    .collage__main{
+      transform: rotate(-1deg);
+    }
+    .collage__main img{
+      height: 460px;
+    }
+  
+    .collage__photo--topRight{ width: 130px; height: 130px; right: 14px; }
+    .collage__photo--bottomLeft{ width: 140px; height: 118px; left: 0px; }
+    .collage__photo--bottomRight{ width: 150px; height: 125px; right: 18px; }
+  
+    .featureGrid{
+      grid-template-columns: 1fr;
+    }
+  
+    .aboutBtns{
+      flex-direction: column;
+    }
+    .btn2{
+      width: 100%;
+    }
+  }
+  
+
+
+  /* ===== AboutDetails directional animation ===== */
+
+/* initial hidden state */
+.aboutDetails .collage,
+.aboutDetails .aboutText{
+  opacity: 0;
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.22,.61,.36,1);
+}
+
+/* images from LEFT → RIGHT */
+.aboutDetails .collage{
+  transform: translateX(-40px);
+}
+
+/* text from RIGHT → LEFT */
+.aboutDetails .aboutText{
+  transform: translateX(40px);
+}
+
+/* visible state */
+.aboutDetails.is-visible .collage{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .05s;
+}
+
+.aboutDetails.is-visible .aboutText{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .15s;
+}
+
+
+@media (max-width: 640px){
+    .aboutDetails .collage,
+    .aboutDetails .aboutText{
+      transform: translateY(24px);
+    }
+  
+    .aboutDetails.is-visible .collage,
+    .aboutDetails.is-visible .aboutText{
+      transform: translateY(0);
+    }
+  }
+
+  
+  /* =========================
+   ABOUT DETAILS animations (stagger)
+========================= */
+
+/* Base hidden state */
+.aboutDetails .collage,
+.aboutDetails .aboutText{
+  opacity: 0;
+  transition:
+    opacity .85s ease,
+    transform .85s cubic-bezier(.22,.61,.36,1);
+  will-change: transform, opacity;
+}
+
+/* Collage from LEFT -> RIGHT */
+.aboutDetails .collage{
+  transform: translateX(-44px);
+}
+
+/* Text from RIGHT -> LEFT */
+.aboutDetails .aboutText{
+  transform: translateX(44px);
+}
+
+/* When visible: bring main columns */
+.aboutDetails.is-visible .collage,
+.aboutDetails.is-visible .aboutText{
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.aboutDetails.is-visible .collage{ transition-delay: .06s; }
+.aboutDetails.is-visible .aboutText{ transition-delay: .16s; }
+
+/* ---- Collage inner stagger (main + small photos) ---- */
+.collage__main,
+.collage__photo{
+  opacity: 0;
+  transform: translateX(-26px) scale(.985);
+  transition:
+    opacity .75s ease,
+    transform .75s cubic-bezier(.22,.61,.36,1);
+  will-change: transform, opacity;
+}
+
+.aboutDetails.is-visible .collage__main{
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  transition-delay: .18s;
+}
+
+/* small photos stagger */
+.aboutDetails.is-visible .collage__photo--topRight{
+  opacity: 1;
+  transform: translateX(0) rotate(10deg);
+  transition-delay: .28s;
+}
+.aboutDetails.is-visible .collage__photo--bottomLeft{
+  opacity: 1;
+  transform: translateX(0) rotate(-8deg);
+  transition-delay: .36s;
+}
+.aboutDetails.is-visible .collage__photo--bottomRight{
+  opacity: 1;
+  transform: translateX(0) rotate(8deg);
+  transition-delay: .44s;
+}
+
+/* ---- Text inner stagger (title, paragraphs, features, buttons, footer) ---- */
+.aboutText__title,
+.aboutText__body p,
+.featureGrid,
+.feature,
+.aboutBtns,
+.aboutLine,
+.aboutFoot{
+  opacity: 0;
+  transform: translateX(26px);
+  transition:
+    opacity .7s ease,
+    transform .7s cubic-bezier(.22,.61,.36,1);
+  will-change: transform, opacity;
+}
+
+/* Title + paragraphs */
+.aboutDetails.is-visible .aboutText__title{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .24s;
+}
+
+.aboutDetails.is-visible .aboutText__body p{
+  opacity: 1;
+  transform: translateX(0);
+}
+.aboutDetails.is-visible .aboutText__body p:nth-child(1){ transition-delay: .30s; }
+.aboutDetails.is-visible .aboutText__body p:nth-child(2){ transition-delay: .36s; }
+.aboutDetails.is-visible .aboutText__body p:nth-child(3){ transition-delay: .42s; }
+
+/* Feature grid appears, then features stagger */
+.aboutDetails.is-visible .featureGrid{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .48s;
+}
+
+.feature{
+  transform: translateY(10px);
+  transition:
+    opacity .65s ease,
+    transform .65s cubic-bezier(.22,.61,.36,1);
+}
+
+.aboutDetails.is-visible .feature{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger features */
+.aboutDetails.is-visible .feature:nth-child(1){ transition-delay: .56s; }
+.aboutDetails.is-visible .feature:nth-child(2){ transition-delay: .62s; }
+.aboutDetails.is-visible .feature:nth-child(3){ transition-delay: .68s; }
+.aboutDetails.is-visible .feature:nth-child(4){ transition-delay: .74s; }
+
+/* Buttons + bottom line + footer */
+.aboutDetails.is-visible .aboutBtns{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .82s;
+}
+
+.aboutDetails.is-visible .aboutLine{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .90s;
+}
+
+.aboutDetails.is-visible .aboutFoot{
+  opacity: 1;
+  transform: translateX(0);
+  transition-delay: .98s;
+}
+
+/* Mobile: better from bottom (not sideways) */
+@media (max-width: 640px){
+  .aboutDetails .collage,
+  .aboutDetails .aboutText{
+    transform: translateY(18px);
+  }
+  .aboutDetails.is-visible .collage,
+  .aboutDetails.is-visible .aboutText{
+    transform: translateY(0);
+  }
+
+  .aboutText__title,
+  .aboutText__body p,
+  .featureGrid,
+  .feature,
+  .aboutBtns,
+  .aboutLine,
+  .aboutFoot{
+    transform: translateY(14px);
+  }
+  .aboutDetails.is-visible .aboutText__title,
+  .aboutDetails.is-visible .aboutText__body p,
+  .aboutDetails.is-visible .featureGrid,
+  .aboutDetails.is-visible .feature,
+  .aboutDetails.is-visible .aboutBtns,
+  .aboutDetails.is-visible .aboutLine,
+  .aboutDetails.is-visible .aboutFoot{
+    transform: translateY(0);
+  }
+
+  /* reset collage photo transforms on mobile, keep their rotations from your base CSS */
+  .collage__main,
+  .collage__photo{
+    transform: translateY(12px) scale(.99);
+  }
+  .aboutDetails.is-visible .collage__main,
+  .aboutDetails.is-visible .collage__photo{
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .aboutDetails *{
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+
+/* ===== Nav text color on light (milky) background ===== */
+
+/* Desktop nav links */
+.topbar.is-scrolled .navPill__link,
+.topbar.is-scrolled .brand__name{
+  color: rgba(45, 75, 55, .95); /* тъмно зелено */
+}
+
+/* Hover + active */
+.topbar.is-scrolled .navPill__link:hover,
+.topbar.is-scrolled .navPill__link.is-active{
+  color: rgba(35, 65, 45, 1);
+}
+
+/* Icons (phone, socials) */
+.topbar.is-scrolled .iconBtn{
+  color: rgba(45, 75, 55, .95);
+}
+
+/* Mobile menu links (fullscreen) */
+.mobileMenu__nav a{
+  color: rgba(45, 75, 55, .95);
+}
+
+/* Active mobile link glow остава златист */
+.mobileMenu__nav a.is-active{
+  text-shadow:
+    0 0 10px rgba(183,155,86,.45),
+    0 0 24px rgba(183,155,86,.30);
+}
+
+
+/* ===== Replay reveal animation for collage only (every N sec) ===== */
+/* When .collage has .is-cycle -> force images back to "hidden" state */
+.aboutDetails.is-visible .collage.is-cycle .collage__main,
+.aboutDetails.is-visible .collage.is-cycle .collage__photo{
+  opacity: 0 !important;
+  transform: translateX(-26px) scale(.985) !important;
+}
+
+/* ===== FORCE reset state for replay (works for img OR div) ===== */
+.aboutDetails.is-visible .collage.is-cycle .collage__main,
+.aboutDetails.is-visible .collage.is-cycle .collage__photo{
+  opacity: 0 !important;
+}
+
+/* Ако .collage__photo са IMG и имат rotate в други правила, не ги пипаме с rotate.
+   Само ги изместваме леко наляво. */
+.aboutDetails.is-visible .collage.is-cycle .collage__main{
+  transform: translateX(-26px) scale(.985) !important;
+}
+
+.aboutDetails.is-visible .collage.is-cycle .collage__photo{
+  /* оставяме rotate-а от твоите правила, само добавяме translateX */
+  transform: translateX(-26px) !important;
+}
+/* ===== Subtle horizontal drift (like video) ===== */
+@keyframes gentleSlide {
+    0%   { transform: translateX(0); }
+    50%  { transform: translateX(28px); }
+    100% { transform: translateX(0); }
+  }
+/* Main image */
+.aboutDetails.is-visible .collage__main{
+    animation: gentleSlide 12s ease-in-out infinite;
+  }
+  
+  /* Small images – същото, но с лек offset */
+  .aboutDetails.is-visible .collage__photo--topRight{
+    animation: gentleSlide 10s ease-in-out infinite;
+  }
+  .aboutDetails.is-visible .collage__photo--bottomLeft{
+    animation: gentleSlide 13s ease-in-out infinite;
+  }
+  .aboutDetails.is-visible .collage__photo--bottomRight{
+    animation: gentleSlide 11s ease-in-out infinite;
+  }
+  .aboutDetails.is-visible .collage__photo--topRight{
+    animation: gentleSlideTR 10s ease-in-out infinite;
+  }
+  .aboutDetails.is-visible .collage__photo--bottomLeft{
+    animation: gentleSlideBL 13s ease-in-out infinite;
+  }
+  .aboutDetails.is-visible .collage__photo--bottomRight{
+    animation: gentleSlideBR 11s ease-in-out infinite;
+  }
+  
+  @keyframes gentleSlideTR{
+    0%   { transform: translateX(0) rotate(10deg); }
+    50%  { transform: translateX(26px) rotate(10deg); }
+    100% { transform: translateX(0) rotate(10deg); }
+  }
+  
+  @keyframes gentleSlideBL{
+    0%   { transform: translateX(0) rotate(-8deg); }
+    50%  { transform: translateX(22px) rotate(-8deg); }
+    100% { transform: translateX(0) rotate(-8deg); }
+  }
+  
+  @keyframes gentleSlideBR{
+    0%   { transform: translateX(0) rotate(8deg); }
+    50%  { transform: translateX(24px) rotate(8deg); }
+    100% { transform: translateX(0) rotate(8deg); }
+  }
+      
+  @media (prefers-reduced-motion: reduce){
+    .aboutDetails.is-visible .collage__main,
+    .aboutDetails.is-visible .collage__photo{
+      animation: none !important;
+    }
+  }
+/* =========================
+   Responsive tuning for gentle slide
+========================= */
+
+/* Desktop default (ако вече си сложила keyframes – остави ги) */
+/* Нищо не пипаме тук, само override-ваме за по-малки екрани. */
+
+/* Tablet: по-малък ход + по-бавно */
+@media (max-width: 980px){
+    @keyframes gentleSlideMain{
+      0%   { transform: translateX(0) rotate(-2deg); }
+      50%  { transform: translateX(18px) rotate(-2deg); }
+      100% { transform: translateX(0) rotate(-2deg); }
+    }
+  
+    @keyframes gentleSlideTR{
+      0%   { transform: translateX(0) rotate(10deg); }
+      50%  { transform: translateX(14px) rotate(10deg); }
+      100% { transform: translateX(0) rotate(10deg); }
+    }
+  
+    @keyframes gentleSlideBL{
+      0%   { transform: translateX(0) rotate(-8deg); }
+      50%  { transform: translateX(12px) rotate(-8deg); }
+      100% { transform: translateX(0) rotate(-8deg); }
+    }
+  
+    @keyframes gentleSlideBR{
+      0%   { transform: translateX(0) rotate(8deg); }
+      50%  { transform: translateX(13px) rotate(8deg); }
+      100% { transform: translateX(0) rotate(8deg); }
+    }
+  
+    /* малко по-бавно за да не “трепти” */
+    .aboutDetails.is-visible .collage__main{ animation-duration: 16s; }
+    .aboutDetails.is-visible .collage__photo--topRight{ animation-duration: 14s; }
+    .aboutDetails.is-visible .collage__photo--bottomLeft{ animation-duration: 18s; }
+    .aboutDetails.is-visible .collage__photo--bottomRight{ animation-duration: 15s; }
+  }
+  
+  /* Mobile: много нежно или OFF (аз го правя много нежно) */
+  @media (max-width: 640px){
+    @keyframes gentleSlideMain{
+      0%   { transform: translateX(0) rotate(-1deg); }
+      50%  { transform: translateX(10px) rotate(-1deg); }
+      100% { transform: translateX(0) rotate(-1deg); }
+    }
+  
+    @keyframes gentleSlideTR{
+      0%   { transform: translateX(0) rotate(10deg); }
+      50%  { transform: translateX(8px) rotate(10deg); }
+      100% { transform: translateX(0) rotate(10deg); }
+    }
+  
+    @keyframes gentleSlideBL{
+      0%   { transform: translateX(0) rotate(-8deg); }
+      50%  { transform: translateX(7px) rotate(-8deg); }
+      100% { transform: translateX(0) rotate(-8deg); }
+    }
+  
+    @keyframes gentleSlideBR{
+      0%   { transform: translateX(0) rotate(8deg); }
+      50%  { transform: translateX(7px) rotate(8deg); }
+      100% { transform: translateX(0) rotate(8deg); }
+    }
+  
+    /* още по-бавно */
+    .aboutDetails.is-visible .collage__main{ animation-duration: 18s; }
+    .aboutDetails.is-visible .collage__photo--topRight{ animation-duration: 16s; }
+    .aboutDetails.is-visible .collage__photo--bottomLeft{ animation-duration: 20s; }
+    .aboutDetails.is-visible .collage__photo--bottomRight{ animation-duration: 17s; }
+  }
+  /* =========================
+   VERY SMALL DEVICES – animation ON (ultra subtle)
+========================= */
+@media (max-width: 420px){
+
+    @keyframes gentleSlideMain{
+      0%   { transform: translateX(0) rotate(-1deg); }
+      50%  { transform: translateX(5px) rotate(-1deg); }
+      100% { transform: translateX(0) rotate(-1deg); }
+    }
+  
+    @keyframes gentleSlideTR{
+      0%   { transform: translateX(0) rotate(10deg); }
+      50%  { transform: translateX(4px) rotate(10deg); }
+      100% { transform: translateX(0) rotate(10deg); }
+    }
+  
+    @keyframes gentleSlideBL{
+      0%   { transform: translateX(0) rotate(-8deg); }
+      50%  { transform: translateX(4px) rotate(-8deg); }
+      100% { transform: translateX(0) rotate(-8deg); }
+    }
+  
+    @keyframes gentleSlideBR{
+      0%   { transform: translateX(0) rotate(8deg); }
+      50%  { transform: translateX(4px) rotate(8deg); }
+      100% { transform: translateX(0) rotate(8deg); }
+    }
+  
+    /* още по-бавно = още по-спокойно */
+    .aboutDetails.is-visible .collage__main{
+      animation: gentleSlideMain 22s ease-in-out infinite !important;
+    }
+  
+    .aboutDetails.is-visible .collage__photo--topRight{
+      animation: gentleSlideTR 20s ease-in-out infinite !important;
+    }
+  
+    .aboutDetails.is-visible .collage__photo--bottomLeft{
+      animation: gentleSlideBL 24s ease-in-out infinite !important;
+    }
+  
+    .aboutDetails.is-visible .collage__photo--bottomRight{
+      animation: gentleSlideBR 21s ease-in-out infinite !important;
+    }
+  }
+  
+    /* =========================
+   Small photos – vertical gentle motion
+========================= */
+@keyframes gentleFloatTR{
+    0%   { transform: translateY(0) rotate(10deg); }
+    50%  { transform: translateY(-10px) rotate(10deg); }
+    100% { transform: translateY(0) rotate(10deg); }
+  }
+  
+  @keyframes gentleFloatBL{
+    0%   { transform: translateY(0) rotate(-8deg); }
+    50%  { transform: translateY(8px) rotate(-8deg); }
+    100% { transform: translateY(0) rotate(-8deg); }
+  }
+  
+  @keyframes gentleFloatBR{
+    0%   { transform: translateY(0) rotate(8deg); }
+    50%  { transform: translateY(-6px) rotate(8deg); }
+    100% { transform: translateY(0) rotate(8deg); }
+  }
+  
+
+  /* =========================
+   SVG ICONS (GLOBAL)
+   ========================= */
+.icon {
+    width: 34px;
+    height: 34px;
+    display: block;
+  
+    /* “Outline” стил */
+    fill: none;
+    stroke: rgba(102, 89, 52, 0.95); /* златисто */
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  
+    /* Smooth */
+    transition: transform 200ms ease, stroke 200ms ease, opacity 200ms ease, filter 200ms ease;
+    opacity: 0.95;
+  }
+  
+  /* Малки икони за CTA/sideReserve */
+  .icon--sm {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2.1;
+  }
+  
+ 
+  
+  /* =========================
+     ICON CONTAINERS
+     ========================= */
+  .statCard__icon,
+  .btn__icon,
+  .sideReserve__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+  }
+  
+
+  
+  /* =========================
+     HOVERS / INTERACTIONS
+     ========================= */
+  
+  /* Hover върху statCard: иконата леко “изплува” */
+  .statCard:hover .statCard__icon {
+    transform: translateY(-2px);
+    
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+  }
+  
+  .statCard:hover .icon {
+    transform: scale(1.06);
+    opacity: 1;
+    filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.25));
+  }
+  
+  /* CTA бутоните – иконките да седят хубаво до текста */
+  .btn__icon {
+    margin-right: 10px;
+  }
+  
+  /* Леко “повдигане” на иконата при hover на бутон */
+  .btn:hover .icon {
+    transform: translateY(-1px) scale(1.05);
+    opacity: 1;
+    filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.22));
+  }
+  
+  /* Side reserve – иконката да е четима на всякакъв фон */
+  .sideReserve .icon {
+    stroke: rgba(255, 255, 255, 0.95);
+    opacity: 0.95;
+  }
+  
+  .sideReserve:hover .icon {
+    transform: scale(1.06);
+    opacity: 1;
+    filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.25));
+  }
+  
+  /* =========================
+     ACCESSIBILITY / REDUCE MOTION
+     ========================= */
+  @media (prefers-reduced-motion: reduce) {
+    .icon,
+    .statCard__icon {
+      transition: none;
+    }
+  }
+  
+
+  .aboutStat__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 999px;
+  
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(212, 175, 55, 0.28);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  
+    transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+  }
+  
+  .aboutStat:hover .aboutStat__icon {
+    transform: translateY(-2px);
+    border-color: rgba(212, 175, 55, 0.55);
+    background: rgba(255, 255, 255, 0.09);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+  }
+  
+  .aboutStat:hover .icon {
+    transform: scale(1.06);
+    filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.25));
+  }
+
+  .feature__icon,
+.aboutFoot__pin {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(212, 175, 55, 0.28);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+}
+
+.feature:hover .feature__icon,
+.aboutFoot:hover .aboutFoot__pin {
+  transform: translateY(-2px);
+  border-color: rgba(212, 175, 55, 0.55);
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+}
+
+.feature:hover .icon,
+.aboutFoot:hover .icon {
+  transform: scale(1.06);
+  filter: drop-shadow(0 6px 14px rgba(212, 175, 55, 0.25));
+}
